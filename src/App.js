@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import { PokemonForm } from './components/PokemonForm';
+
 const getPokemonByName = (list, name) => {
   if (!name || !list?.length) return null;
 
@@ -38,18 +40,22 @@ function App() {
 
   const selectPokemon = getPokemonByName(pokemons, selectedPokmeonName);
 
+  const handlePokemonSelect = (pokemonName = '') => {
+    setSelectedPokmeonName(pokemonName);
+  };
+
+  const formOptions =
+    pokemons?.map((pokemon) => ({
+      label: pokemon.name,
+      value: pokemon.name,
+    })) || [];
+
   return (
     <div className='App'>
-      <ul>
-        {pokemons.map((pokemon) => (
-          <li
-            key={pokemon.name}
-            onClick={() => setSelectedPokmeonName(pokemon.name)}
-          >
-            {pokemon.name}
-          </li>
-        ))}
-      </ul>
+      <PokemonForm
+        options={formOptions}
+        onPokemonNameSelect={handlePokemonSelect}
+      />
       <h3>Selected Pokemon: {selectPokemon?.name}</h3>
       {selectedPokemonData && (
         <div>
