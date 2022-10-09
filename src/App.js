@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 
+const getPokemonByName = (list, name) => {
+  if (!name || !list?.length) return null;
+
+  return list.find((item) => item.name === name);
+};
+
 function App() {
   const [pokemons, setPokemons] = useState([]);
   const [selectedPokmeonName, setSelectedPokmeonName] = useState('');
@@ -15,9 +21,18 @@ function App() {
       .catch(console.warn);
   }, []);
 
-  const selectPokemon = selectedPokmeonName
-    ? pokemons.find((pokemon) => pokemon.name === selectedPokmeonName)
-    : null;
+  useEffect(() => {
+    const selectedItem = getPokemonByName(pokemons, selectedPokmeonName);
+
+    fetch(selectedItem.url)
+      .then((e) => e.json())
+      .then((response) => {
+        console.log('re', response);
+      })
+      .catch(console.warn);
+  }, [selectedPokmeonName]);
+
+  const selectPokemon = getPokemonByName(pokemons, selectedPokmeonName);
 
   return (
     <div className='App'>
