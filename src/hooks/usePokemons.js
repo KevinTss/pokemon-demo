@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 
 export const usePokemons = () => {
+  const [isLoading, setisLoading] = useState(true);
   const [pokemons, setPokemons] = useState([]);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     fetch('https://pokeapi.co/api/v2/pokemon')
@@ -9,9 +11,18 @@ export const usePokemons = () => {
       .then((response) => {
         const pokemonList = response.results;
         setPokemons(pokemonList);
+        setisLoading(false);
       })
-      .catch(console.warn);
+      .catch((error) => {
+        console.warn(error);
+        setisLoading(false);
+        setError('Faile to fetch pokemons');
+      });
   }, []);
 
-  return pokemons;
+  return {
+    pokemons,
+    isLoading,
+    error,
+  };
 };

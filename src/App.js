@@ -14,7 +14,7 @@ const getPokemonByName = (list, name) => {
 };
 
 function App() {
-  const pokemons = usePokemons();
+  const { pokemons, isLoading, error } = usePokemons();
 
   const [selectedPokmeonName, setSelectedPokmeonName] = useState('');
   const [selectedPokemonData, setSelectedPokemonData] = useState(null);
@@ -45,6 +45,14 @@ function App() {
       label: pokemon.name,
       value: pokemon.name,
     })) || [];
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   return (
     <div className='App'>
