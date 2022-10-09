@@ -10,6 +10,7 @@ const getPokemonByName = (list, name) => {
 function App() {
   const [pokemons, setPokemons] = useState([]);
   const [selectedPokmeonName, setSelectedPokmeonName] = useState('');
+  const [selectedPokemonData, setSelectedPokemonData] = useState(null);
 
   useEffect(() => {
     fetch('https://pokeapi.co/api/v2/pokemon')
@@ -24,10 +25,12 @@ function App() {
   useEffect(() => {
     const selectedItem = getPokemonByName(pokemons, selectedPokmeonName);
 
+    if (!selectedItem?.url) return;
+
     fetch(selectedItem.url)
       .then((e) => e.json())
       .then((response) => {
-        console.log('re', response);
+        setSelectedPokemonData(response);
       })
       .catch(console.warn);
   }, [selectedPokmeonName]);
@@ -47,6 +50,11 @@ function App() {
         ))}
       </ul>
       <h3>Selected Pokemon: {selectPokemon?.name}</h3>
+      {selectedPokemonData && (
+        <div>
+          <img src={selectedPokemonData.sprites.front_default} />
+        </div>
+      )}
     </div>
   );
 }
