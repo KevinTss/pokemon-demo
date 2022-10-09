@@ -3,6 +3,8 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { PokemonForm } from './components/PokemonForm';
+import { EmptyState } from './components/EmptyState';
+import { PokemonCard } from './components/PokemonCard';
 
 const getPokemonByName = (list, name) => {
   if (!name || !list?.length) return null;
@@ -38,10 +40,12 @@ function App() {
       .catch(console.warn);
   }, [selectedPokmeonName]);
 
-  const selectPokemon = getPokemonByName(pokemons, selectedPokmeonName);
-
   const handlePokemonSelect = (pokemonName = '') => {
     setSelectedPokmeonName(pokemonName);
+  };
+  const handleReset = () => {
+    setSelectedPokmeonName('');
+    setSelectedPokemonData(null);
   };
 
   const formOptions =
@@ -56,11 +60,10 @@ function App() {
         options={formOptions}
         onPokemonNameSelect={handlePokemonSelect}
       />
-      <h3>Selected Pokemon: {selectPokemon?.name}</h3>
-      {selectedPokemonData && (
-        <div>
-          <img src={selectedPokemonData.sprites.front_default} />
-        </div>
+      {selectedPokemonData ? (
+        <PokemonCard pokemon={selectedPokemonData} onReset={handleReset} />
+      ) : (
+        <EmptyState />
       )}
     </div>
   );
