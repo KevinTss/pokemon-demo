@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { PokemonForm } from './components/PokemonForm';
 import { EmptyState } from './components/EmptyState';
 import { PokemonCard } from './components/PokemonCard';
+import { usePokemons } from './hooks/usePokemons';
 
 const getPokemonByName = (list, name) => {
   if (!name || !list?.length) return null;
@@ -13,19 +14,10 @@ const getPokemonByName = (list, name) => {
 };
 
 function App() {
-  const [pokemons, setPokemons] = useState([]);
+  const pokemons = usePokemons();
+
   const [selectedPokmeonName, setSelectedPokmeonName] = useState('');
   const [selectedPokemonData, setSelectedPokemonData] = useState(null);
-
-  useEffect(() => {
-    fetch('https://pokeapi.co/api/v2/pokemon')
-      .then((e) => e.json())
-      .then((response) => {
-        const pokemonList = response.results;
-        setPokemons(pokemonList);
-      })
-      .catch(console.warn);
-  }, []);
 
   useEffect(() => {
     const selectedItem = getPokemonByName(pokemons, selectedPokmeonName);
